@@ -1,32 +1,32 @@
 ## Modelo construido a partir de "SEIR Transmission dynamics model of 2019 nCoV coronavirus with considering
 ## the weak infectious ability and changes in latency duration" de Shi Pengpeng, Cao Shengli y Feng Peihua.
-## Con partes de c骴igo de Alison Hill  (https://github.com/alsnhll)
+## Con partes de c贸digo de Alison Hill  (https://github.com/alsnhll)
 
-## 8 de abril de 2019
+## 8 de abril de 2020
 library (deSolve)
 library(ggplot2)
 library(scales)
 ## VARIABLES
-S <-  129000000 # poblaci髇
+S <-  129000000 # poblaci贸n
 E <-  9188 # expuestos
-I <-  3181 # infectados 8 de abril M蒟ICO
-Sq <- 38700000 #poblaci髇 en cuarentena
-Eq <- 1287 #Poblaci髇 expuesta en cuarentena
+I <-  3181 # infectados 8 de abril M脡XICO
+Sq <- 38700000 #poblaci贸n en cuarentena
+Eq <- 1287 #Poblaci贸n expuesta en cuarentena
 H <-  I + Eq
 R <-  633 #recuperados
 
-## PAR罬ETROS
-c <- 3    # contactos por d韆
-beta <- 0.35       # probabilidad de transmisi韔n
+## PAR脕METROS
+c <- 3    # contactos por d铆a
+beta <- 0.35       # probabilidad de transmisi铆on
 q <- 0.09           #radio de cuarentena
 theta <- 1          #probabilidad de contagio en latencia
-lambda <- 1/14         #duraci髇 de la cuarentena
+lambda <- 1/14         #duraci贸n de la cuarentena
 delta_i <- 0.03 #cuantos enfermos son cuarentenados
-delta_q <- 0.14 #tasa de transformaci髇 de expuestos a aislados infectados
-gama_i <- 0.003 #tasa de recuperaci髇 de los infectados
-gama_h <- 0.009 #tasa de recuperaci髇 de los aislados infectados
+delta_q <- 0.14 #tasa de transformaci贸n de expuestos a aislados infectados
+gama_i <- 0.003 #tasa de recuperaci贸n de los infectados
+gama_h <- 0.009 #tasa de recuperaci贸n de los aislados infectados
 alfa <- 0.05 # "desease-induced death date 
-sigma <- 1/7 #tiempo de incubaci髇
+sigma <- 1/7 #tiempo de incubaci贸n
 
 parameter_list <-  c (c, beta, q, theta, lambda, delta_i, delta_q, gama_i, gama_h, alfa, sigma)
 seirplus_model <- function (current_timepoint, state_values, parameters)
@@ -77,7 +77,7 @@ outputf <- merge(output, Fecha, by = "time")
 
 grafIH <- ggplot() + geom_line(data=outputf, aes(x=Fecha, y=I), linetype="solid", color="blue", size=2) +
              geom_line(data=outputf, aes(x=Fecha, y=H), linetype="solid", color="red", size=2) + labs(x = "Fecha") +
-             labs(title = "Contagios y hospitalizaciones COVID-19 M閤ico", subtitle = "Contagiados en azul, hospitalizaciones necesarias en rojo") + 
+             labs(title = "Contagios y hospitalizaciones COVID-19 M茅xico", subtitle = "Contagiados en azul, hospitalizaciones necesarias en rojo") + 
              labs(y = "Habitantes") + scale_y_continuous(labels = comma)
 
 grafIH
