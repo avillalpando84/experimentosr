@@ -1,16 +1,20 @@
-## Con partes de código de Alison Hill  (https://github.com/alsnhll)
+## Con partes de cÃ³digo de Alison Hill  (https://github.com/alsnhll)
 
 library (deSolve)
-W <- 129000000        # susceptibles 8 de abril
-X <- 3182           # infectados
-Y <- 633           # removidos
-Z <- 9188           # expuestos
+library (ggplot2)
+library(scales)
+
+W <- 128983681       # susceptibles 13 de abril
+X <- 5014          # infectados
+Y <- 1964           # removidos
+Z <- 9341           # expuestos
 N <- W + X + Y + Z
 
-contact_rate <- 5    # contactos por día
-transmission_probability <- 0.35       # probabilidad de transmisiíon
+contact_rate <- 2    # contactos por dÃ­a
+transmission_probability <- 0.35       # probabilidad de transmisiÃ­on
 infectious_period <- 14                 # periodo infeccioso
-latent_period <- 6.4                  # periodo de incubación
+latent_period <- 5.5                  # periodo de incubaciÃ³n
+
 beta_value <- contact_rate * transmission_probability
 gamma_value <- 1 / infectious_period
 delta_value <- 1 / latent_period
@@ -40,25 +44,32 @@ seir_model <- function (current_timepoint, state_values, parameters)
 }
   
 initial_values <- c (S = W/N, E = X/N, I = Y/N, R = Z/N)
-timepoints <- seq (0, 90, by=1)
+timepoints <- seq (0, 120, by=1)
 output <- lsoda (initial_values, timepoints, seir_model, parameter_list)
 
-plot (S ~ time, data = output, type='l', col = 'blue') 
-plot (E ~ time, data = output, type='l', col = 'pink')  
-plot (I ~ time, data = output, type='l', col = 'red') 
-plot (R ~ time, data = output, type='l', col = 'green')  
-  
-  # susceptibles
-plot (S ~ time, data = output, type='l', ylim = c(0,1), lwd = 4, xlab = "Tiempo en días", col = 'blue', ylab = 'Porcentaje de la población', main = 'Estimación de personas susceptibles, expuestas, infectadas y recuperadas') 
-par (new = TRUE)    
-  
-  # expuestos
-plot (E ~ time, data = output, type='l', ylim = c(0,1), lwd = 4, col = 'pink', ylab = '', axes = FALSE)
-par (new = TRUE) 
-  
-  # infecciosos
-plot (I ~ time, data = output, type='l', ylim = c(0,1), lwd = 4, col = 'red', ylab = '', axes = FALSE) 
-par (new = TRUE)  
-  
-  # removidos
-plot (R ~ time, data = output, type='l', ylim = c(0,1), lwd = 4, col = 'green', ylab = '', axes = FALSE)
+Fecha = seq(from = as.Date("2020-04-11"), to = as.Date("2020-08-09"), by = 'day')
+Fecha <- as.data.frame(Fecha)
+output <- as.data.frame(output)
+Fecha$time <- output$time
+outputn <- merge(output, Fecha, by = "time")
+
+
+
+plot(outputf$I~as.Date(outputf$Fecha,"%d/%m/%y"),type="l", 
+     lwd = 4, col = 'blue', ylim = c(0,1),
+     ylab = 'Porcentaje de la poblaciÃ³n',
+     main = 'Infectados con SARS-CoV-2 (MX): 15, 7, 3, 2 y 1 contactos al dÃ­a. Modelo SEIR clÃ¡sico. @avillalpandoa 13-abr-2020', axes = TRUE)
+grid(nx = 18, ny = 6, col = "lightgray", lty = "solid")
+par (new = TRUE)
+
+plot(I ~ time, data = outputm, type='l', ylim = c(0,1), col = 'red', lwd = 4, axes = FALSE)
+par (new = TRUE)
+
+plot(I ~ time, data = outputr, type='l', ylim = c(0,1), col = 'green', lwd = 4, axes = FALSE)
+par (new = TRUE)
+
+plot(I ~ time, data = outputs, type='l', ylim = c(0,1), col = 'purple', lwd = 4, axes = FALSE)
+par (new = TRUE)
+
+plot(I ~ time, data = outputn, type='l', ylim = c(0,1), col = 'yellow', lwd = 4, axes = FALSE)
+par (new = TRUE)
